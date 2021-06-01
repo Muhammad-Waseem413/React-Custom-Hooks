@@ -5,10 +5,15 @@ import useDebounce from "../hooks/useDebounce";
 
 export default function HooksPlayground() {
   const [name, setName] = useLocalStorage("name", "");
+  const [searchInput, setSearchInput] = React.useState("");
 
-  const debouncedInput = useDebounce(name, 500);
+  const debouncedInput = useDebounce(name, 1000);
 
-  const prevValue = usePrevious(name);
+  React.useEffect(() => {
+    setSearchInput(debouncedInput);
+  }, [debouncedInput]);
+
+  const prevValue = usePrevious(searchInput);
   return (
     <div>
       <input
@@ -17,7 +22,7 @@ export default function HooksPlayground() {
         value={name}
         onChange={(event) => setName(event.target.value)}
       />
-      <div>Previous Value: {prevValue}</div>
+      <div>Previous Search: {prevValue}</div>
       <div>Debounced Value: {debouncedInput}</div>
     </div>
   );
